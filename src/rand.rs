@@ -205,7 +205,7 @@ mod sysrand {
 // Keep the `cfg` conditions in sync with the conditions in lib.rs.
 #[cfg(all(
     feature = "use_heap",
-    any(target_os = "redox", unix),
+    unix,
     not(any(target_os = "macos", target_os = "ios")),
     not(all(target_os = "linux", not(feature = "dev_urandom_fallback"))),
     not(any(target_os = "fuchsia")),
@@ -219,7 +219,7 @@ mod urandom {
 
         #[cfg(target_os = "redox")]
         static RANDOM_PATH: &str = "rand:";
-        #[cfg(unix)]
+        #[cfg(all(unix, not(target_os = "redox")))]
         static RANDOM_PATH: &str = "/dev/urandom";
 
         lazy_static! {
